@@ -13,3 +13,13 @@
 		$(this).addClass('active');
 		e.preventDefault();
 	});
+
+    $('#login-submit').click(function(e) {
+		var user = $("#username").val();
+                var pass = $("#password").val();
+	      if (user == "admin" && pass =="admin"){
+	      $.session.set("admin",true);
+		 window.location.replace(hostname +"admin.html");
+	      }
+		e.preventDefault();
+	});
