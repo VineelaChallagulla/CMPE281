@@ -1,0 +1,253 @@
+<!DOCTYPE html>
+<html>
+
+<head>
+  <meta charset="utf-8">
+  <meta http-equiv="X-UA-Compatible" content="IE=edge">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>Dashboard</title>
+  <link rel="stylesheet" href="bootstrap.css">
+  <link rel="stylesheet" href="switchery.min.css">
+  <link rel="stylesheet" href="base.css">
+  <link rel="stylesheet" href="daterangepicker.css">
+  <link rel="stylesheet" type="text/css" href="https://rawgit.com/wenzhixin/bootstrap-table/master/dist/bootstrap-table.min.css">
+  <link rel="stylesheet" type="text/css" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.7.0/css/font-awesome.min.css">
+  <link rel="stylesheet" type="text/css" href="https://cdn.datatables.net/1.10.16/css/jquery.dataTables.min.css">
+  <!-- Bootstrap 4 CDN CSS -->
+  <!--     <link href="https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0-alpha/css/bootstrap.min.css" rel="stylesheet" integrity="sha256-GHW2S7IZAQe8+YkyL99LyDj1zdWXSPOG+JZafCtKiSc= sha512-vxM32w6T7zJ83xOQ6FT4CEFnlasqmkcB0+ojgbI0N6ZtSxYvHmT7sX2icN07TqEqr5wdKwoLkmB8sAsGAjCJHg==" crossorigin="anonymous"> -->
+  <!--[if lt IE 9]>
+      <script src="https://oss.maxcdn.com/html5shiv/3.7.2/html5shiv.min.js"></script>
+      <script src="https://oss.maxcdn.com/respond/1.4.2/respond.min.js"></script>
+      <![endif]-->
+</head>
+
+<body>
+  <div class="loading">
+  </div>
+  <!-- navigation bar -->
+  <nav class="navbar navbar-fixed-top">
+    <div class="container-fluid">
+      <div class="row">
+        <div class="col-sm-2 top-left-menu">
+          <div class="navbar-header">
+            <a id="dashboardLink" class="navbar-brand" href="dashboard.html">
+              <h1>Dashboard</h1>
+            </a>
+            <button type="button" class="navbar-toggle collapsed" data-toggle="collapse" data-target="#nav-menu" aria-expanded="false">
+                     <span class="sr-only">Toggle navigation</span>
+                     <span class="icon-bar"></span>
+                     <span class="icon-bar"></span>
+                     <span class="icon-bar"></span>
+                     </button>
+          </div>
+        </div>
+        <div id="nav-menu" class="collapse navbar-collapse pull-right">
+          <!-- Options button dropdown -->
+          <div id="nav-profile" class="btn-group pull-right">
+            <button type="button" class="btn btn-link dropdown-toggle thumbnail" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+                     <img src="marker.png" class="img-circle">
+                     </button>
+            <ul class="dropdown-menu">
+              <li><a href="login.html">Logout</a></li>
+            </ul>
+          </div>
+        </div>
+        <div id="adminOperationLink" class="btn-group pull-right">
+          <button type="button" class="btn btn-link" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+                    Admin Operations
+                  </button>
+        </div>
+      </div>
+    </div>
+  </nav>
+  <div class="container-fluid">
+    <div class="row">
+      <div id="side-menu" class="col-sm-2 hidden-xs" data-spy="affix" data-offset-top="0">
+        <ul class="nav nav-pills nav-stacked">
+
+          <div id="reportingMenu">
+            <div class="form-group   ">
+              <label for="cityselector" style="color:#FFF;">Select Station</label>
+              <select class="form-control  " id="cityselector">
+                     <option>Sacramento</option>
+                     <option>Santa Clara</option>
+                     <option>San Francisco</option>
+                  </select>
+
+
+
+              <label for="sensorselector" style="color:#FFF;">Select Sensor</label>
+              <select class="form-control  " id="sensorselector">
+                     <option>CO</option>
+                     <option>NO2</option>
+                     <option>SO2</option>
+                     <option>Ozone</option>
+                     
+                  </select>
+
+              <button id="displayMainViewButton" type="button" class="btn btn-primary" style="background-color: #e5e9ec; color: black;">Display</button>
+
+            </div>
+            <div class="form-group   ">
+              <label style="color:#FFF;">Select Time Range</label>
+              <input id="timeRange" class="daterangepicker-field" style="background-color: #e5e9ec;"></input>
+              <input id="peiodHidden" type="hidden" />
+            </div>
+          </div>
+          <div id="adminMenu" style="display: none;">
+ 
+          </div>
+
+        </ul>
+      </div>
+
+
+      <div id="main" class="col-sm-offset-2 col-sm-10 ">
+        <div class="col-sm-4" style="padding: 5px; background-color: #FFF;">
+          <div class="w-75" id="map" style="width: 100%; min-height: 100%;">
+          </div>
+        </div>
+        <div class="col-sm-8" style="padding: 5px; background-color: #FFF;">
+          <div id="daily-usage" style="width: 100%; height: 400px">
+            <div class="area-chart" style="min-height: 80%;"></div>
+          </div>
+        </div>
+      </div>
+      <div id="mainAdmin" class="col-sm-offset-2 col-sm-10 ">
+        <div class="col-sm-6" style="padding: 5px; background-color: #FFF;">
+          <table id="stationTable" class="display" style="width:100%; display: none;">
+            <thead>
+              <tr>
+                <th>Station ID</th>
+                <th>Station Name</th>
+
+                <th>Action</th>
+              </tr>
+            </thead>
+            <tfoot>
+              <tr>
+                <th>Station ID</th>
+                <th>Station Name</th>
+
+                <th>Action</th>
+              </tr>
+            </tfoot>
+          </table>
+        </div>
+        <div class="col-sm-6" style="padding: 5px; background-color: #FFF;">
+          <table id="sensorTable" class="display" style="width:100%; display: none;">
+            <thead>
+              <tr>
+                <th>Station ID</th>
+                <th>Station Name</th>
+                <th>Sensor Id</th>
+                <th>Type</th>
+                <th>Status</th>
+
+                <th>Action</th>
+              </tr>
+            </thead>
+            <tfoot>
+              <tr>
+                <th>Station ID</th>
+                <th>Station Name</th>
+                <th>Sensor Id</th>
+                <th>Type</th>
+                <th>Status</th>
+
+                <th>Action</th>
+              </tr>
+            </tfoot>
+          </table>
+        </div>
+        <div class="col-sm-6" style="padding: 5px; background-color: #FFF;">
+          <form class="station" id="form-station" role="form">
+            <fieldset>
+              <legend>Station Details</legend>
+              <div class="form-group">
+                <label for="stationName">Station Name</label>
+                <input class="form-control" name="stationName">
+              </div>
+              <div class="form-group">
+                <label for="longitude">Longitude</label>
+                <input class="form-control" name="longitude">
+              </div>
+              <div class="form-group">
+                <label for="latitude">Latitude</label>
+                <input class="form-control" name="latitude">
+              </div>
+              <button id="stationSubmit" type="button" class="btn btn-primary">Submit</button>
+            </fieldset>
+          </form>
+        </div>
+
+        <div class="col-sm-6" style="padding: 5px; background-color: #FFF;">
+          <form class="sensor" id="form-sensor" role="form">
+            <fieldset>
+              <legend>Sensor Details</legend>
+              <div class="form-group">
+                <label for="sensorStationId">Station ID</label>
+                <input class="form-control" name="sensorStationId">
+              </div>
+              <div class="form-group">
+                <label for="type">Type</label>
+                <input class="form-control" name="type">
+              </div>
+              <button id="sensorSubmit" type="button" class="btn btn-primary">Submit</button>
+              <fieldset>
+          </form>
+
+        </div>
+      </div>
+
+
+
+
+
+      <div id="mainTab" class="col-sm-offset-2 col-sm-10 " style="padding: 10px; background-color: #FFF;">
+        <table class="display table table-bordered" id="clienti">
+          <thead>
+            <tr>
+              <th data-field="No">Number</th>
+              <th data-field="Date">Date</th>
+              <th data-field="AQS_SITE_ID">AQS_SITE_ID</th>
+              <th data-field="POC">POC</th>
+              <th data-field="Daily Max 8 hr oz">Daily Max 8 hr oz</th>
+              <th data-field="Units">Units</th>
+              <th data-field="Daily_AQS_Value">Daily_AQS_Value</th>
+              <th data-field="Daily_OBS_Count">Daily_OBS_Count</th>
+              <th data-field="Station Name">Station Name</th>
+              <th data-field="State">State</th>
+            </tr>
+          </thead>
+        </table>
+      </div>
+    </div>
+  </div>
+  </div>
+  <script src="jquery.min.js"></script>
+  <script src="moment.min.js"></script>
+  <script src="knockout.js"></script>
+  <script src="daterangepicker.js"></script>
+  <script src="bootstrap.js"></script>
+  <script src="jquery.easypiechart.min.js"></script>
+  <script src="https://code.highcharts.com/highcharts.js"></script>
+  <script src="https://code.highcharts.com/highcharts-more.js"></script>
+  <script src="https://code.highcharts.com/highcharts.js"></script>
+  <script src="https://code.highcharts.com/modules/exporting.js"></script>
+  <script src="https://code.highcharts.com/modules/export-data.js"></script>
+  <script src="switchery.min.js"></script>
+  <script src="https://maps.googleapis.com/maps/api/js?key=AIzaSyCpW_700d4pSJBB2bBrhDeWPmD9BPqjzrg"></script>
+  <script src="https://rawgit.com/wenzhixin/bootstrap-table/master/dist/bootstrap-table.min.js"></script>
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.12.9/umd/popper.min.js"></script>
+  <script src="https://rawgit.com/wenzhixin/bootstrap-table/develop/src/extensions/export/bootstrap-table-export.js"></script>
+  <script src="https://rawgit.com/hhurz/tableExport.jquery.plugin/master/tableExport.js"></script>
+  <script src="https://cdn.datatables.net/1.10.16/js/jquery.dataTables.min.js"></script>
+
+
+  <!-- Bootstrap 4 CDN JS -->
+  <!-- <script src="https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0-alpha/js/bootstrap.min.js" integrity="sha256-+h0g0j7qusP72OZaLPCSZ5wjZLnoUUicoxbvrl14WxM= sha512-0z9zJIjxQaDVzlysxlaqkZ8L9jh8jZ2d54F3Dn36Y0a8C6eI/RFOME/tLCFJ42hfOxdclfa29lPSNCmX5ekxnw==" crossorigin="anonymous"></script> -->
+  <script src="main.js"></script>
+</body>
+
+</html>
