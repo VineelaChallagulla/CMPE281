@@ -8,6 +8,8 @@ $(document).ready(function () {
 
 
     $('#adminOperationLink').click(function (e) {
+        $.session.set("admin","value");
+        if ($.session.get("admin")){
         $("#mainAdmin").delay(100).fadeIn(100);
         $("#sensorTable").fadeOut(100);
         $("#adminMenu").delay(100).fadeIn(100);
@@ -16,7 +18,12 @@ $(document).ready(function () {
         $("#reportingMenu").fadeOut(100);
         loadStationTable();
         $(this).addClass('active');
+        }
+        else{
+        window.location.replace(hostname +"login.html");
+        }
         e.preventDefault();
+            
     });
 
     $('#dashboardLink').click(function (e) {
