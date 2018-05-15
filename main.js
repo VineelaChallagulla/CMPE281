@@ -8,7 +8,6 @@ $(document).ready(function () {
 
 
     $('#adminOperationLink').click(function (e) {
-        $.session.set("admin","value");
         if ($.session.get("admin")){
         $("#mainAdmin").delay(100).fadeIn(100);
         $("#sensorTable").fadeOut(100);
